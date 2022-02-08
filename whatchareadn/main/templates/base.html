@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}PC Builder{% endblock %}</title>
+    <link href="{% static "css/base.css" %}" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="container">
+    <header class="header">
+      <h1 class="logo">WhatchaReadN</h1>
+
+      <input type="checkbox" id="nav-toggle" class="nav-toggle">
+
+        <nav>
+          <ul>
+            <li><a href="{% url 'main:index' %}">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+
+          <div class="sidenav">
+          <hr>
+
+          <h3>Shop for parts</h3>
+
+            <ul>
+              <li><a href="#">case</a></li>
+              <li><a href="#">mobo</a></li>
+              <li><a href="#">cpu</a></li>
+              <li><a href="#">gpu</a></li>
+              <li><a href="#">ram</a></li>
+              <li><a href="#">psu</a></li>
+              <li><a href="#">storage</a></li>
+              <li><a href="#">fan</a></li>
+            </ul>
+          </div>
+
+        </nav>
+        <label for="nav-toggle" class="nav-toggle-label">
+          <span></span>
+        </label>
+    </header>
+
+          <div class="sidebar">
+            <h3>Shop for parts</h3>
+            <ul>
+              <li><a href="#">case</a></li>
+              <li><a href="#">mobo</a></li>
+              <li><a href="#">cpu</a></li>
+              <li><a href="#">gpu</a></li>
+              <li><a href="#">ram</a></li>
+              <li><a href="#">psu</a></li>
+              <li><a href="#">storage</a></li>
+              <li><a href="#">fan</a></li>
+            </ul>
+          </div>
+
+      <div class="main">
+        {% block content %}{% endblock %}
+      </div>
+      <div class="footer">
+        <p>Footer Area</p>
+      </div>
+    </div>
+  </body>
+
+</html>
