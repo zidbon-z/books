@@ -3,4 +3,19 @@
 GoogleBooksAPI Key: AIzaSyArFMXNcONVP1TUkIcZ32GNHbZ8xffQSnY
 
 {% block content %}
+
+<ul>
+{% for i in stuff.items %}
+<li>
+  {{ i.volumeInfo.title }}
+{% for si in i.volumeInfo.industryIdentifiers %}
+{% if si.identifier|length == 13 %}
+<p>ISBN: {{ si.identifier }}</p>
+{% endif %}
+{% endfor %}
+</li>
+{% endfor %}
+</ul>
+
+
 {% endblock %}
