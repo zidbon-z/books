@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}PC Builder{% endblock %}</title>
+    <title>{% block title %}WhatchaReadN{% endblock %}</title>
     <link href="{% static "css/base.css" %}" rel="stylesheet">
   </head>
 
@@ -20,9 +20,10 @@
         <nav>
           <ul>
             <li><a href="{% url 'main:index' %}">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="#">Library</a></li>
+            <li><a href="#">Have Read</a></li>
+            <li><a href="#">Wish List</a></li>
+            <li><a href="{% url 'main:search' %}">Search</a></li>
           </ul>
 
           <div class="sidenav">
@@ -51,6 +52,7 @@
           <div class="sidebar">
             <h3>Shop for parts</h3>
             <ul>
+              <li><a href="{% url 'main:search' %}">Search</a></li>
               <li><a href="#">case</a></li>
               <li><a href="#">mobo</a></li>
               <li><a href="#">cpu</a></li>

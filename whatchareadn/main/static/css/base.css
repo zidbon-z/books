@@ -135,6 +135,14 @@ nav a:hover {
   margin-bottom: 50px;
 }
 
+.searchContainer {
+  display: block;
+}
+
+.searchContainer form {
+  margin-top: 10px;
+}
+
 .footer {
   grid-area: footer;
   background: black;

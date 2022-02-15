@@ -8,6 +8,45 @@ class Index(View):
 
     def get(self, request):
 
+
+        context = {
+        }
+
+        return render(request, 'main/index.html', context)
+
+    def post(self, request):
+
+        if 'titlebtn' in request.POST:
+            searched = request.POST['titleSearch']
+
+            r = requests.get('https://www.googleapis.com/books/v1/volumes?q=' + searched, params=request.GET)
+            print(r.text)
+            stuff = json.loads(r.text)
+
+            context = {
+                    'stuff': stuff,
+            }
+
+            return render(request, 'main/index.html', context)
+
+        elif 'authorbtn' in request.POST:
+            searched = request.POST['authorSearch']
+
+            r = requests.get('https://www.googleapis.com/books/v1/volumes?q=inauthor:' + searched, params=request.GET)
+            print(r.text)
+            stuff = json.loads(r.text)
+
+            context = {
+                    'stuff': stuff,
+            }
+
+            return render(request, 'main/index.html', context)
+
+
+class Search(View):
+
+    def get(self, request):
+
         search = "one piece"
         r = requests.get('https://www.googleapis.com/books/v1/volumes?q=' + search, params=request.GET)
         print(r.text)
@@ -17,4 +56,32 @@ class Index(View):
                 'stuff': stuff,
         }
 
-        return render(request, 'main/index.html', context)
+        return render(request, 'main/search.html', context)
+
+    def post(self, request):
+
+        if 'titlebtn' in request.POST:
+            searched = request.POST['titleSearch']
+
+            r = requests.get('https://www.googleapis.com/books/v1/volumes?q=' + searched, params=request.GET)
+            print(r.text)
+            stuff = json.loads(r.text)
+
+            context = {
+                    'stuff': stuff,
+            }
+
+            return render(request, 'main/index.html', context)
+
+        elif 'authorbtn' in request.POST:
+            searched = request.POST['authorSearch']
+
+            r = requests.get('https://www.googleapis.com/books/v1/volumes?q=inauthor:' + searched, params=request.GET)
+            print(r.text)
+            stuff = json.loads(r.text)
+
+            context = {
+                    'stuff': stuff,
+            }
+
+            return render(request, 'main/search.html', context)
