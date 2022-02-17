@@ -71,7 +71,7 @@ class Search(View):
                     'stuff': stuff,
             }
 
-            return render(request, 'main/index.html', context)
+            return render(request, 'main/search.html', context)
 
         elif 'authorbtn' in request.POST:
             searched = request.POST['authorSearch']
@@ -82,6 +82,19 @@ class Search(View):
 
             context = {
                     'stuff': stuff,
+            }
+
+            return render(request, 'main/search.html', context)
+
+        elif 'googleidbtn' in request.POST:
+            searched = request.POST['googleidSearch']
+
+            r = requests.get('https://www.googleapis.com/books/v1/volumes/' + searched, params=request.GET)
+            print(r.text)
+            stuffs = json.loads(r.text)
+
+            context = {
+                    'stuffs': stuffs,
             }
 
             return render(request, 'main/search.html', context)

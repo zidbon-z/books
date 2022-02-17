@@ -3,6 +3,9 @@
 GoogleBooksAPI Key: AIzaSyArFMXNcONVP1TUkIcZ32GNHbZ8xffQSnY
 
 {% block content %}
+{% for message in messages %}
+<p>{{ message }}</p>
+{% endfor%}
 
 <div class="searchContainer">
 <form method=POST action="{% url 'main:index' %}">

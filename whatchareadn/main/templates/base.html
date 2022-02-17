@@ -11,6 +11,7 @@
 
   <body>
 
+
     <div class="container">
     <header class="header">
       <h1 class="logo">WhatchaReadN</h1>
@@ -24,6 +25,11 @@
             <li><a href="#">Have Read</a></li>
             <li><a href="#">Wish List</a></li>
             <li><a href="{% url 'main:search' %}">Search</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'users:logout' %}">Logout</a></li>
+            {% else %}
+            <li><a href="{% url 'users:login'%}">Login</a></li>
+            {% endif %}
           </ul>
 
           <div class="sidenav">
@@ -44,6 +50,9 @@
           </div>
 
         </nav>
+            {% if user.is_authenticated %}
+            <p>Welcome, {{ user.username }}</p>
+            {% endif %}
         <label for="nav-toggle" class="nav-toggle-label">
           <span></span>
         </label>
@@ -65,6 +74,13 @@
           </div>
 
       <div class="main">
+
+        {% if messages %}
+          {% for message in messages %}
+          <p> {{ message }}</p>
+          {% endfor%}
+        {% endif%}
+
         {% block content %}{% endblock %}
       </div>
       <div class="footer">

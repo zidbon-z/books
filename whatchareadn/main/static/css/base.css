@@ -22,6 +22,8 @@ body {
 /* navigation styling starts here */
 
 header {
+  display: grid;
+  grid-template-columns: 50px auto auto; 
   top: 0;
   background: var(--background);
   background-image: linear-gradient(purple, black);
@@ -29,6 +31,11 @@ header {
   position: fixed;
   z-index: 999;
   width: 100%;
+}
+
+.logo {
+  grid-column: 2;
+  padding-left: 5px;
 }
 
 .nav-toggle {
@@ -115,6 +122,10 @@ nav a:hover {
 }
 /* End navigation styling */
 
+header p {
+  grid-column: 3;
+}
+
   .container {
     display: grid;
     min-height: 100%;
@@ -150,34 +161,45 @@ nav a:hover {
 }
 
 .card {
+  display: grid;
+  grid-template-rows: 150px;
+  grid-template-columns: 130px 1fr;
+  grid-template-areas:
+    "image card-body";
   padding: 0px;
   border-radius: 5px;
   border: 3px solid black;
   background: white;
-  width: 350px;
-  height: 550px;
   margin: 5px;
+  height: 205px;
+  max-width: 1fr;
+  min-width: 400px;
 }
 
 .card-title {
-  background-image: linear-gradient(purple, black);
   margin: 0;
   text-align: center;
 }
 
 .card-img-box {
+  grid-area: image;
   display: flex;
-  width: 350px;
-  height: 250px;
+  width: 130px;
+  height: 200px;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
-  margin-top: 20px;
+  margin-bottom: 0px;
+  margin-top: 0px;
 }
 
 .card img {
-  max-height: 250px;
-  max-width: 250px;
+  max-height: 200px;
+  max-width: 130px;
+}
+
+.card-body {
+  display: block;
+  grid-area: card-body;
 }
 
 .card h2 {
@@ -199,7 +221,7 @@ nav a:hover {
   color: white;
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 1000px) {
   .nav-toggle-label {
     display: none;
   }
@@ -261,21 +283,28 @@ nav a:hover {
     transform: scale(1,1);
   }
 
-.sidenav {
-  grid-area: sidenav;
-  display: none;
-  position: relative;
-  background: black;
-  color: white;
-}
+  header p {
+    grid-column: 5;
+    margin-left: 5em;
+    margin-right: 3em;
+    color: cyan;
+  }
 
-.sidebar {
-  grid-area: sidebar;
-  display: block;
-  margin-top: 80px;
-  background: black;
-  color: white;
-}
+  .sidenav {
+    grid-area: sidenav;
+    display: none;
+    position: relative;
+    background: black;
+    color: white;
+  }
+
+  .sidebar {
+    grid-area: sidebar;
+    display: block;
+    margin-top: 80px;
+    background: black;
+    color: white;
+  }
 
   .container {
     display: grid;
@@ -286,6 +315,11 @@ nav a:hover {
       "header header header"
       "sidebar main ."
       "footer footer footer";
+  }
+
+  .main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 
 }
