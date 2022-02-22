@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}WhatchaReadN{% endblock %}</title>
     <link href="{% static "css/base.css" %}" rel="stylesheet">
+    {% block head %}
+    {% endblock %}
   </head>
 
   <body>
@@ -21,9 +23,11 @@
         <nav>
           <ul>
             <li><a href="{% url 'main:index' %}">Home</a></li>
-            <li><a href="#">Library</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'main:library' %}">Library</a></li>
             <li><a href="#">Have Read</a></li>
             <li><a href="#">Wish List</a></li>
+            {% endif %}
             <li><a href="{% url 'main:search' %}">Search</a></li>
             {% if user.is_authenticated %}
             <li><a href="{% url 'users:logout' %}">Logout</a></li>
@@ -35,17 +39,16 @@
           <div class="sidenav">
           <hr>
 
-          <h3>Shop for parts</h3>
+          <h3>Sidebar Dropdown</h3>
 
             <ul>
-              <li><a href="#">case</a></li>
-              <li><a href="#">mobo</a></li>
-              <li><a href="#">cpu</a></li>
-              <li><a href="#">gpu</a></li>
-              <li><a href="#">ram</a></li>
-              <li><a href="#">psu</a></li>
-              <li><a href="#">storage</a></li>
-              <li><a href="#">fan</a></li>
+              <li><a href="#">these</a></li>
+              <li><a href="#">could</a></li>
+              <li><a href="#">be</a></li>
+              <li><a href="#">links</a></li>
+              <li><a href="#">to</a></li>
+              <li><a href="#">something</a></li>
+              <li><a href="#">useful</a></li>
             </ul>
           </div>
 
@@ -59,17 +62,16 @@
     </header>
 
           <div class="sidebar">
-            <h3>Shop for parts</h3>
+            <h3>Sidebar</h3>
             <ul>
               <li><a href="{% url 'main:search' %}">Search</a></li>
-              <li><a href="#">case</a></li>
-              <li><a href="#">mobo</a></li>
-              <li><a href="#">cpu</a></li>
-              <li><a href="#">gpu</a></li>
-              <li><a href="#">ram</a></li>
-              <li><a href="#">psu</a></li>
-              <li><a href="#">storage</a></li>
-              <li><a href="#">fan</a></li>
+              <li><a href="#">these</a></li>
+              <li><a href="#">could</a></li>
+              <li><a href="#">be</a></li>
+              <li><a href="#">links</a></li>
+              <li><a href="#">to</a></li>
+              <li><a href="#">something</a></li>
+              <li><a href="#">useful</a></li>
             </ul>
           </div>
 
@@ -87,6 +89,8 @@
         <p>Footer Area</p>
       </div>
     </div>
+    {% block js %}
+    {% endblock %}
   </body>
 
 </html>

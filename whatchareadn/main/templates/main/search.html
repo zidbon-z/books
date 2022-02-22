@@ -1,6 +1,10 @@
 {% extends "base.html" %}
+{% load static %}
 
 GoogleBooksAPI Key: AIzaSyArFMXNcONVP1TUkIcZ32GNHbZ8xffQSnY
+{% block head %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{% endblock %}
 
 {% block content %}
 
@@ -29,50 +33,56 @@ GoogleBooksAPI Key: AIzaSyArFMXNcONVP1TUkIcZ32GNHbZ8xffQSnY
 {% for i in stuff.items %}
 
 
+{% if i.volumeInfo.authors and i.volumeInfo.imageLinks.thumbnail %}
   <div class="card">
     <div class="card-img-box">
       <img src="{{ i.volumeInfo.imageLinks.thumbnail }}" />
     </div>
     <div class="card-body">
-      <h1 class="card-title">{{i.volumeInfo.title}}</h1>
-          {{ i.volumeInfo.title }}
-        {% for si in i.volumeInfo.industryIdentifiers %}
-        {% if si.type == "ISBN_10" %}
-        <p>ISBN_10: {{ si.identifier }}</p>
-        {% endif %}
-        {% if si.type == "ISBN_13" %}
-        <p>ISBN_13: {{ si.identifier }}</p>
-        {% endif %}
-        {% endfor %}
-      <form action="http://google.com">
-        <input type="submit" value="Add to Library" />
-      </form>
+      <h2 class="card-title">{{i.volumeInfo.title|truncatechars:20}}</h2>
+      <p>Authors: {{ i.volumeInfo.authors }}</p>
+      <p>Description: {{ i.volumeInfo.description|truncatechars:50 }}...</p>
+
+      {% if i.volumeInfo.title in books %}
+      <p class="inlibrary">In Library</p>
+      {% else %}
+      <a class="poop-btn" id="poop{{ i.id }}" href="#", poop-id="{{ i.id }}">Add to Library</a>
+      {% endif %}
+
+      <p class="poop-added" id="poop-added{{ i.id }}"></p>
+
     </div>
   </div>
+{% endif %}
 
 {% endfor %}
 {% endif%}
 
-  <div class="card">
-    <div class="card-img-box">
-      <img src="{{ stuffs.volumeInfo.imageLinks.thumbnail }}" />
-    </div>
-    <div class="card-body">
-      <h1 class="card-title">{{stuffs.volumeInfo.title}}</h1>
-          {{ stuffs.volumeInfo.title }}
-        {% for si in stuffs.volumeInfo.industryIdentifiers %}
-        {% if si.type == "ISBN_10" %}
-        <p>ISBN_10: {{ si.identifier }}</p>
-        {% endif %}
-        {% if si.type == "ISBN_13" %}
-        <p>ISBN_13: {{ si.identifier }}</p>
-        {% endif %}
-        {% endfor %}
-      <form>
-        {% csrf_token %}
-        <button>Add to Library</button>
-      </form>
-    </div>
-  </div>
 
+{% endblock %}
+
+{% block js %}
+<script>
+$('.poop-btn').click(function(e){
+  e.preventDefault();
+  var poopid;
+  poopid = $(this).attr("poop-id");
+
+    $.ajax({
+      type:'POST',
+      url : '{% url 'main:adder' %}',
+      data:{
+          poop: poopid,
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+      },
+      success: function(html){
+          $( '#poop'+ poopid ).hide();
+          $( '#poop-added'+ poopid ).append("Added");
+          
+      
+      },
+    });
+});
+
+</script>
 {% endblock %}

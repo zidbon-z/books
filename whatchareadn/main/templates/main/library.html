@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>My Library</h1>
+
+{% for book in library %}
+  <div class="card">
+    <div class="card-img-box">
+      <img src="{{book.image_link}}" />
+    </div>
+    <div class="card-body">
+      <h2 class="card-title">{{book.title}}</h2>
+      {% if "," in book.authors  %}
+      <p>Authors: {{book.authors}}</p>
+      {% else %}
+      <p>Author: {{book.authors}}</p>
+      {% endif %}
+    </div>
+  </div>
+{% endfor %}
+
+{% endblock%}

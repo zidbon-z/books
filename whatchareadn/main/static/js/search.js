@@ -1,0 +1,63 @@
+$(document).on('submit','#post-form',function(e){
+
+  e.preventDefault();
+  let url = "{% url 'main:add' i.id %}";
+
+  $.ajax({
+    type:'GET',
+    url : url,
+  });
+});
+
+###########################################
+
+#### Code works but takes the first item in the loop ####
+
+$(document).on('submit','#post-form',function(e){
+  e.preventDefault();
+
+    $.ajax({
+      type:'POST',
+      url : '{% url 'main:adder' %}',
+      data:{
+          poop:$('#poop').val(),
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+      },
+      success: function(data){
+      },
+    });
+});
+
+#############################################
+
+#### Card template for single book ####
+
+  <div class="card">
+    <div class="card-img-box">
+      <img src="{{ stuffs.volumeInfo.imageLinks.thumbnail }}" />
+    </div>
+    <div class="card-body">
+      <h1 class="card-title">{{stuffs.volumeInfo.title}}</h1>
+          {{ stuffs.volumeInfo.title }}
+        {% for si in stuffs.volumeInfo.industryIdentifiers %}
+        {% if si.type == "ISBN_10" %}
+        <p>ISBN_10: {{ si.identifier }}</p>
+        {% endif %}
+        {% if si.type == "ISBN_13" %}
+        <p>ISBN_13: {{ si.identifier }}</p>
+        {% endif %}
+        {% endfor %}
+      <form>
+        {% csrf_token %}
+        <button>Add to Library</button>
+      </form>
+    </div>
+  </div>
+
+############################################################
+
+####  adds book to library and goes to the library page ####
+        <form action="{% url 'main:add' i.id %}">
+          <input type="hidden" name="next" value="{{ request.path }}" />
+          <input type="submit" value="Add to Library" />
+        </form>

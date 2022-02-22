@@ -23,7 +23,7 @@ body {
 
 header {
   display: grid;
-  grid-template-columns: 50px auto auto; 
+  grid-template-columns: 50px auto auto auto; 
   top: 0;
   background: var(--background);
   background-image: linear-gradient(purple, black);
@@ -34,7 +34,7 @@ header {
 }
 
 .logo {
-  grid-column: 2;
+  grid-column: 2/3;
   padding-left: 5px;
 }
 
@@ -148,6 +148,7 @@ header p {
 
 .searchContainer {
   display: block;
+  grid-column: 2/3;
 }
 
 .searchContainer form {
@@ -215,6 +216,14 @@ header p {
   border-color: purple;
 }
 
+.inlibrary {
+  color: green;
+}
+
+.poop-added {
+  color: green;
+}
+
 .sidebar {
   display: none;
   background: black;
@@ -228,7 +237,7 @@ header p {
 
   header {
     display: grid;
-    grid-template-columns: 1fr auto minmax(600px, 3fr) 1fr;
+    grid-template-columns: auto auto auto auto;
   }
 
   .logo {
