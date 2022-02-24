@@ -13,14 +13,15 @@
 <button btn-id="xAvzDQAAQBAJ" class="detail-btn">Book Info</button>
 
 <div id="library-body">
-
 </div>
+  <img id="lib-img" src="" alt="">
 
 {% endblock %}
 
 
 {% block js %}
 
+<!--Info button appends book info to html elements-->
 <script>
   $('.detail-btn').click(function(e){
     e.preventDefault();
@@ -36,8 +37,9 @@
       },
       success: function(response){
         //console.log(response);
-        //$(#library-body).empty();
-        document.getElementById('library-body').append(response.title);
+
+        document.getElementById('library-body').innerHTML = response.title;
+        document.getElementById('lib-img').src = response.image_link;
         
 
       },

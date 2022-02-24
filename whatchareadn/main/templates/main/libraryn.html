@@ -9,11 +9,16 @@
 
 <h1>My Libraryn</h1>
 
+<div id="library-body">
 {% for book in library %}
 <div class="card" id="book{{ book.googleid }}">
+
+  <a id="card-link" class="detail-btn" btn-id="{{ book.googleid }}" href="#">
     <div class="card-img-box">
       <img src="{{book.image_link}}" />
     </div>
+  </a>
+
     <div class="card-body">
       <h2 class="card-title">{{book.title}}</h2>
       {% if "," in book.authors  %}
@@ -28,25 +33,59 @@
     </div>
   </div>
 {% endfor %}
-
-{% for volume in booksdetails %}
-<div id="volume{{ volume.id }}" class="detail-card">
-  <img src="{{ volume.volumeInfo.imageLinks.thumbnail }}" alt="">
-  <div class="detail-card-title">{{ volume.volumeInfo.title }}</div>
-  <div class="detail-card-author">
-    {% for author in volume.volumeInfo.authors %}
-    <div>{{ author }}</div>
-    {% endfor%}
-  </div>
-  <p class="detail-card-description">{{ volume.volumeInfo.description | safe }}</p>
-  <div class="detail-card-publishdate">{{ volume.volumeInfo.publishedDate }}</div>
 </div>
-{% endfor %}
+
+<div id="detail-card" >
+  <img id="detail-card-img" src="#" alt="">
+  <div id="detail-card-title"></div>
+  <div id="detail-card-description"></div>
+  <button class="back-btn">X</button>
+  
+</div>
 
 {% endblock%}
 
 {% block js %}
+
 <script>
+  $('.back-btn').click(function(){
+    document.getElementById('detail-card').style.display = "none";
+    document.getElementById('library-body').style.display = "block";
+
+  });
+</script>
+
+<!--Info button appends book info to html elements-->
+<script>
+  $('.detail-btn').click(function(e){
+    e.preventDefault();
+    var btnid;
+    btnid = $(this).attr("btn-id");
+
+    $.ajax({
+      type: 'POST',
+      url: '{% url 'main:detail' %}',
+      data:{
+        btnid: btnid,
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+      },
+      success: function(response){
+        //console.log(response);
+
+        document.getElementById('detail-card-title').innerHTML = response.title;
+        document.getElementById('detail-card-img').src = response.image_link;
+        document.getElementById('detail-card-description').innerHTML = response.description;
+        document.getElementById('detail-card').style.display = "grid";
+        document.getElementById('library-body').style.display = "none";
+        
+
+      },
+    });
+
+  });
+</script>
+
+<!-- <script>
   $('.info-btn').click(function(){
     var infoid;
     var volumeid;
@@ -59,7 +98,7 @@
       collection[i].style.display = "none";
     }
   });
-</script>
+</script> -->
 <script>
 $('.del-btn').click(function(e){
   e.preventDefault();

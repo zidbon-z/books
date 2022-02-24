@@ -14,6 +14,7 @@ class Book(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=250)
     authors = models.CharField(max_length=250, null=True, blank=True)
+    description = models.CharField(max_length=2000, null=True, blank=True)
     googleid = models.CharField(max_length=250)
     image_link = models.URLField(max_length=1000, null=True, blank=True)
     have_read = models.BooleanField(default=False)

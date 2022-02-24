@@ -230,8 +230,14 @@ header p {
   color: white;
 }
 
-.detail-card {
+#detail-card {
   display: none;
+  background: white;
+}
+
+#detail-card-img {
+  height: 200px;
+  width: 150px;
 }
 
 @media screen and (min-width: 1000px) {

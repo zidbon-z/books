@@ -120,15 +120,9 @@ class Libraryn(View):
         cur_user = request.user
         library = Book.objects.filter(owner=cur_user)
         booksdetails = []
-        for book in library:
-            i = book.googleid
-            r = requests.get('https://www.googleapis.com/books/v1/volumes/' + i, params=request.GET)
-            detail = json.loads(r.text)
-            booksdetails.append(detail)
 
 
         return render(request, 'main/libraryn.html', {'library': library,
-                                                      'booksdetails': booksdetails,
                                                      })
 
 def add_book_view(request, googleid):
@@ -165,12 +159,15 @@ def add_another_book_view(request):
 
         title = stuffs["volumeInfo"]["title"]
         authors = stuffs["volumeInfo"]["authors"]
+        if "description" in stuffs["volumeInfo"]:
+            description = stuffs["volumeInfo"]["description"]
         googleid = stuffs["id"]
         image_link = stuffs["volumeInfo"]["imageLinks"]["thumbnail"]
         new_book = Book(
                         owner = request.user,
                         title = title,
                         authors = authors,
+                        description = description,
                         googleid = googleid,
                         image_link = image_link,
                         )
@@ -195,6 +192,7 @@ def get_book_detail(request):
                 'title': volume.title,
                 'authors': volume.authors,
                 'image_link': volume.image_link,
+                'description': volume.description,
         }
         return JsonResponse(response)
 
