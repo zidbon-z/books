@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% block head %}
@@ -6,7 +7,7 @@
 
 {% block content %}
 
-<h1>My Library</h1>
+<h1>My Libraryn</h1>
 
 {% for book in library %}
 <div class="card" id="book{{ book.googleid }}">
@@ -22,14 +23,43 @@
       {% endif %}
       {% csrf_token %}
       <button class="del-btn" butt-id="{{ book.googleid }}">Delete</button>
+      <button class="info-btn" info-id="{{ book.googleid }}">Info</button>
       
     </div>
   </div>
 {% endfor %}
 
+{% for volume in booksdetails %}
+<div id="volume{{ volume.id }}" class="detail-card">
+  <img src="{{ volume.volumeInfo.imageLinks.thumbnail }}" alt="">
+  <div class="detail-card-title">{{ volume.volumeInfo.title }}</div>
+  <div class="detail-card-author">
+    {% for author in volume.volumeInfo.authors %}
+    <div>{{ author }}</div>
+    {% endfor%}
+  </div>
+  <p class="detail-card-description">{{ volume.volumeInfo.description | safe }}</p>
+  <div class="detail-card-publishdate">{{ volume.volumeInfo.publishedDate }}</div>
+</div>
+{% endfor %}
+
 {% endblock%}
 
 {% block js %}
+<script>
+  $('.info-btn').click(function(){
+    var infoid;
+    var volumeid;
+    infobtnid = $(this).attr("info-id");
+    volumeid = 'volume' + infobtnid;
+    console.log(volumeid);
+    document.getElementById(volumeid).style.display = "block";
+    const collection = document.getElementsByClassName("card");
+    for (let i = 0; i < collection.length; i++) {
+      collection[i].style.display = "none";
+    }
+  });
+</script>
 <script>
 $('.del-btn').click(function(e){
   e.preventDefault();

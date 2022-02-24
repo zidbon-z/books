@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block head %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Test Page</h1>
+
+{% csrf_token %}
+<button btn-id="xAvzDQAAQBAJ" class="detail-btn">Book Info</button>
+
+<div id="library-body">
+
+</div>
+
+{% endblock %}
+
+
+{% block js %}
+
+<script>
+  $('.detail-btn').click(function(e){
+    e.preventDefault();
+    var btnid;
+    btnid = $(this).attr("btn-id");
+
+    $.ajax({
+      type: 'POST',
+      url: '{% url 'main:detail' %}',
+      data:{
+        btnid: btnid,
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+      },
+      success: function(response){
+        //console.log(response);
+        //$(#library-body).empty();
+        document.getElementById('library-body').append(response.title);
+        
+
+      },
+    });
+
+  });
+</script>
+
+{% endblock %}

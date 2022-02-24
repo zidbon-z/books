@@ -164,7 +164,7 @@ header p {
 .card {
   display: grid;
   grid-template-rows: 150px;
-  grid-template-columns: 130px 1fr;
+  grid-template-columns: 130px auto;
   grid-template-areas:
     "image card-body";
   padding: 0px;
@@ -173,7 +173,7 @@ header p {
   background: white;
   margin: 5px;
   height: 205px;
-  max-width: 1fr;
+  width: 100%;
   min-width: 400px;
 }
 
@@ -228,6 +228,10 @@ header p {
   display: none;
   background: black;
   color: white;
+}
+
+.detail-card {
+  display: none;
 }
 
 @media screen and (min-width: 1000px) {

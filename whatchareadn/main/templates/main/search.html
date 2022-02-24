@@ -46,7 +46,7 @@ GoogleBooksAPI Key: AIzaSyArFMXNcONVP1TUkIcZ32GNHbZ8xffQSnY
       {% if i.volumeInfo.title in books %}
       <p class="inlibrary">In Library</p>
       {% else %}
-      <a class="poop-btn" id="poop{{ i.id }}" href="#", poop-id="{{ i.id }}">Add to Library</a>
+      <button class="poop-btn" id="poop{{ i.id }}" poop-id="{{ i.id }}">Add to Library</button>
       {% endif %}
 
       <p class="poop-added" id="poop-added{{ i.id }}"></p>
@@ -83,6 +83,5 @@ $('.poop-btn').click(function(e){
       },
     });
 });
-
 </script>
 {% endblock %}

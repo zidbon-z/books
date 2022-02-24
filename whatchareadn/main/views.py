@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 
 from .models import Book, Shelf
 import requests
@@ -113,6 +113,24 @@ class Library(View):
 
         return render(request, 'main/library.html', {'library': library,})
 
+class Libraryn(View):
+
+    def get(self, request):
+
+        cur_user = request.user
+        library = Book.objects.filter(owner=cur_user)
+        booksdetails = []
+        for book in library:
+            i = book.googleid
+            r = requests.get('https://www.googleapis.com/books/v1/volumes/' + i, params=request.GET)
+            detail = json.loads(r.text)
+            booksdetails.append(detail)
+
+
+        return render(request, 'main/libraryn.html', {'library': library,
+                                                      'booksdetails': booksdetails,
+                                                     })
+
 def add_book_view(request, googleid):
     searched = googleid
     if request.method == "GET":
@@ -159,5 +177,30 @@ def add_another_book_view(request):
         new_book.save()
 
         return HttpResponse('Yo')
+
+def delete_book_view(request):
+    buttid = request.POST['buttid']
+    if request.method == "POST":
+        Book.objects.filter(googleid=buttid).delete()
+        return HttpResponse('Yo')
+
+def testpage_view(request):
+    return render(request, 'main/testpage.html', {})
+
+def get_book_detail(request):
+    bookid = request.POST['btnid']
+    if request.method == "POST":
+        volume = Book.objects.get(googleid=bookid)
+        response = {
+                'title': volume.title,
+                'authors': volume.authors,
+                'image_link': volume.image_link,
+        }
+        return JsonResponse(response)
+
+
+
+
+
 
 
