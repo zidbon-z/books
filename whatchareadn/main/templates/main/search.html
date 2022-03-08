@@ -1,87 +1,92 @@
+<!-- vim:fileencoding=utf-8:ft=html:foldmethod=marker
+-->
+
 {% extends "base.html" %}
 {% load static %}
 
 GoogleBooksAPI Key: AIzaSyArFMXNcONVP1TUkIcZ32GNHbZ8xffQSnY
-{% block head %}
+
+{% block head %}<!--{{{-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-{% endblock %}
+{% endblock %}<!--}}}-->
 
 {% block content %}
 
-<div class="searchContainer">
+<div id="search-body"><!--{{{-->
+  <div class="searchContainer">
 
-<form method=POST action="{% url 'main:search' %}">
-  {% csrf_token %}
-  <input type="search" placeholder="Search for Books by Title" aria-label="Search" name="titleSearch">
-  <button type="submit" name="titlebtn">Search</button>
-</form>
-
-<form method=POST action="{% url 'main:search' %}">
-  {% csrf_token %}
-  <input type="search" placeholder="Search for Books by Author" aria-label="Search" name="authorSearch">
-  <button type="submit" name="authorbtn">Search</button>
-</form>
-
-<form method=POST action="{% url 'main:search' %}">
-  {% csrf_token %}
-  <input type="search" placeholder="Search for Books by GoogleID" aria-label="Search" name="googleidSearch">
-  <button type="submit" name="googleidbtn">Search</button>
-</form>
-</div>
-
-{% if stuff %}
-{% for i in stuff.items %}
-
-
-{% if i.volumeInfo.authors and i.volumeInfo.imageLinks.thumbnail %}
-  <div class="card">
-    <div class="card-img-box">
-      <img src="{{ i.volumeInfo.imageLinks.thumbnail }}" />
-    </div>
-    <div class="card-body">
-      <h2 class="card-title">{{i.volumeInfo.title|truncatechars:20}}</h2>
-      <p>Authors: {{ i.volumeInfo.authors }}</p>
-      <p>Description: {{ i.volumeInfo.description|truncatechars:50 }}...</p>
-
-      {% if i.volumeInfo.title in books %}
-      <p class="inlibrary">In Library</p>
-      {% else %}
-      <button class="poop-btn" id="poop{{ i.id }}" poop-id="{{ i.id }}">Add to Library</button>
-      {% endif %}
-
-      <p class="poop-added" id="poop-added{{ i.id }}"></p>
-
-    </div>
+    <form method=POST action="{% url 'main:search' %}">
+      {% csrf_token %}
+      <input type="search" placeholder="Search for Books by Title" aria-label="Search" name="titleSearch">
+      <button type="submit" name="titlebtn">Search</button>
+    </form>
   </div>
-{% endif %}
 
-{% endfor %}
-{% endif%}
+  <div id="search-book-body"><!--{{{-->
+    {% if stuff %}
+    {% for i in stuff.items %}
+    {% if i.volumeInfo.authors and i.volumeInfo.imageLinks.thumbnail %}
+    <div class="card">
 
+
+    <a id="card-link" class="detail-btn" btn-id="{{ i.id }}" href="#">
+      <div class="card-img-box">
+        <img src="{{ i.volumeInfo.imageLinks.thumbnail }}" />
+      </div>
+    </a>
+
+
+      <div class="card-body">
+        <div class="search-card-body">
+          <h2 class="card-title">{{i.volumeInfo.title|truncatechars:40}}</h2>
+
+          <div class="search-card-authors">
+
+            {% for author in i.volumeInfo.authors|slice:":2" %}
+              <span><small>-{{author}}</small></span>
+            {% endfor %}
+            {% if i.volumeInfo.authors|length > 2 %}
+            <span>...</span>
+            {% endif %}
+          </div>
+
+
+          {% if i.volumeInfo.title in books %}
+          <p class="inlibrary">In Library</p>
+          {% else %}
+          <button class="search-add-btn" id="search-add{{ i.id }}" search-add-id="{{ i.id }}">Add to Library</button>
+          {% endif %}
+
+          <p class="search-book-added" id="search-book-added{{ i.id }}"></p>
+
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif%}
+  </div><!--}}}-->
+
+
+</div><!--}}}-->
+
+<div id="modal" class="modal">
+  <div id="detail-card" ><!--{{{-->
+    <img id="detail-card-img" src="#" alt="">
+    <div class="detail-card-info">
+      <div id="detail-card-title"></div>
+      <div id="detail-card-authors"></div>
+      <div id="detail-card-publisher"></div>
+      <div id="detail-card-pubdate"></div>
+      <div id="detail-card-isbns"></div>
+      <button class="back-btn">X</button>
+    </div>
+    <div id="detail-card-description"></div>
+  </div><!--}}}-->
+</div>
 
 {% endblock %}
 
 {% block js %}
-<script>
-$('.poop-btn').click(function(e){
-  e.preventDefault();
-  var poopid;
-  poopid = $(this).attr("poop-id");
-
-    $.ajax({
-      type:'POST',
-      url : '{% url 'main:adder' %}',
-      data:{
-          poop: poopid,
-          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
-      },
-      success: function(html){
-          $( '#poop'+ poopid ).hide();
-          $( '#poop-added'+ poopid ).append("Added");
-          
-      
-      },
-    });
-});
-</script>
+  <script src="{% static 'js/search.js' %}"></script>
 {% endblock %}

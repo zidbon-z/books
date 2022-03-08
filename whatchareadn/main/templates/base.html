@@ -26,7 +26,6 @@
             <li><a href="{% url 'main:index' %}">Home</a></li>
             {% if user.is_authenticated %}
             <li><a href="{% url 'main:library' %}">Library</a></li>
-            <li><a href="{% url 'main:libraryn' %}">Libraryn</a></li>
             <li><a href="{% url 'main:test' %}">Test</a></li>
             <li><a href="#">Have Read</a></li>
             <li><a href="#">Wish List</a></li>
@@ -39,7 +38,7 @@
             {% endif %}
           </ul>
 
-          <div class="sidenav">
+          <!-- <div class="sidenav">
           <hr>
 
           <h3>Sidebar Dropdown</h3>
@@ -53,7 +52,7 @@
               <li><a href="#">something</a></li>
               <li><a href="#">useful</a></li>
             </ul>
-          </div>
+          </div> -->
 
         </nav>
             {% if user.is_authenticated %}
@@ -64,7 +63,7 @@
         </label>
     </header>
 
-          <div class="sidebar">
+          <!-- <div class="sidebar">
             <h3>Sidebar</h3>
             <ul>
               <li><a href="{% url 'main:search' %}">Search</a></li>
@@ -76,7 +75,8 @@
               <li><a href="#">something</a></li>
               <li><a href="#">useful</a></li>
             </ul>
-          </div>
+          </div> -->
+
 
       <div class="main">
 
@@ -88,6 +88,7 @@
 
         {% block content %}{% endblock %}
       </div>
+
       <div class="footer">
         <p>Footer Area</p>
       </div>

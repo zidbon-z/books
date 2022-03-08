@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block head %}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -6,48 +7,70 @@
 
 {% block content %}
 
-<h1>My Library</h1>
-
-{% for book in library %}
-<div class="card" id="book{{ book.googleid }}">
-    <div class="card-img-box">
-      <img src="{{book.image_link}}" />
-    </div>
-    <div class="card-body">
-      <h2 class="card-title">{{book.title}}</h2>
-      {% if "," in book.authors  %}
-      <p>Authors: {{book.authors}}</p>
-      {% else %}
-      <p>Author: {{book.authors}}</p>
-      {% endif %}
+<div class="page-body">
+  <div class="library-header">
+    <h1>My Library</h1>
+    
+    <label for="select-shelf">Shelf</label>  
       {% csrf_token %}
-      <button class="del-btn" butt-id="{{ book.googleid }}">Delete</button>
-      
-    </div>
+    <select id="select-shelf" class="select-shelf" name="select-shelf" onchange="getShelf()">
+      <option value="All">All</option>
+      {% for shelf in shelves %}
+      <option value="{{ shelf }}">{{ shelf }}</option>
+      {% endfor%}
+    </select>
   </div>
-{% endfor %}
+  
+  
+  <div id="library-body">
+  {% for book in library %}
+  <div class="card" id="book{{ book.googleid }}">
+  
+    <a id="card-link" class="detail-btn" btn-id="{{ book.googleid }}" href="#">
+      <div class="card-img-box">
+        <img src="{{book.image_link}}" />
+      </div>
+    </a>
+ 
+      <div class="card-body">
+        <h3 class="card-title">{{book.title}}</h3>
+        <div class="button-row">
+          <label for="book-shelf">Shelf</label>
+          {% csrf_token %}
+          <select id="book-shelf{{ book.googleid }}" class="book-shelf" googleid="{{ book.googleid }}" name="book-shelf" onchange="getShelf()">
+            <option value="{{book.shelf}}">{{book.shelf}}</option>
+            {% for shelf in shelves %}
+            <option value="{{ shelf }}">{{ shelf }}</option>
+            {% endfor%}
+          </select>
+
+
+          <button class="read-btn" butt-id="{{ book.googleid }}">Read Book</button>
+          <button class="del-btn" butt-id="{{ book.googleid }}">Delete Book</button>
+        </div>
+      </div>
+  </div>
+  {% endfor %}
+  </div>
+</div>
+
+<div id="modal" class="modal">
+  <div id="detail-card" >
+    <img id="detail-card-img" src="#" alt="">
+    <div class="detail-card-info">
+      <div id="detail-card-title"></div>
+      <div id="detail-card-authors"></div>
+      <div id="detail-card-publisher"></div>
+      <div id="detail-card-pubdate"></div>
+      <div id="detail-card-isbns"></div>
+      <button class="back-btn">X</button>
+    </div>
+    <div id="detail-card-description"></div>
+  </div>
+</div>
 
 {% endblock%}
 
 {% block js %}
-<script>
-$('.del-btn').click(function(e){
-  e.preventDefault();
-  var buttid;
-  buttid = $(this).attr("butt-id");
-
-    $.ajax({
-        type:'POST',
-        url :'{% url 'main:delete' %}',
-        data:{
-            buttid: buttid,
-            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
-        },
-        success: function(html){
-            document.getElementById('book' + buttid).remove();
-        },
-    });
-
-});
-</script>
+  <script src="{% static 'js/library.js' %}"></script>
 {% endblock %}
