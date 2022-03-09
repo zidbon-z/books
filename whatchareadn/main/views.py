@@ -1,4 +1,6 @@
+# vim:foldmethod=marker
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from django.views import View
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
@@ -7,8 +9,13 @@ from .models import Book, Shelf
 import requests
 import json
 
+
 ############################
-# Home page view 
+# PAGES
+############################
+
+############################
+# Home page view {{{
 class Index(View):
 
     def get(self, request):
@@ -34,10 +41,10 @@ class Index(View):
         }
 
         return render(request, 'main/index.html', context)
-
+# }}}
 
 ############################
-# Search page view 
+# Search page view {{{
 class Search(View):
 
     def get(self, request):
@@ -46,6 +53,7 @@ class Search(View):
         return render(request, 'main/search.html', context)
 
     def post(self, request):
+        cur_user = request.user
 
         if 'titlebtn' in request.POST:
             searched = request.POST['titleSearch']
@@ -53,7 +61,7 @@ class Search(View):
             r = requests.get('https://www.googleapis.com/books/v1/volumes?q=' + searched + '&maxResults=40', params=request.GET)
             print(r.text)
             stuff = json.loads(r.text)
-            books = list(Book.objects.all().values_list('title', flat=True))
+            books = list(Book.objects.filter(owner=cur_user).values_list('title', flat=True))
 
             context = {
                     'stuff': stuff,
@@ -91,25 +99,42 @@ class Search(View):
             }
 
             return render(request, 'main/search.html', context)
-
+# }}}
 
 ############################
-# Library page view 
+# Library page view {{{
 class Library(View):
 
     def get(self, request):
 
         cur_user = request.user
         library = Book.objects.filter(owner=cur_user)
-        shelves = Shelf.objects.all()
+        shelves = Shelf.objects.filter(owner=cur_user)
 
 
         return render(request, 'main/library.html', {'library': library,
                                                       'shelves': shelves,
                                                      })
+# }}}
+
+############################
+# Test page view {{{
+def testpage_view(request):
+        cur_user = request.user
+        library = Book.objects.filter(owner=cur_user)
+        shelves = Shelf.objects.all()
+        return render(request, 'main/testpage.html', {'library': library,
+                                                      'shelves': shelves,
+                                                    })
+# }}}
 
 
+############################
+# FUNCTIONS
+############################
 
+############################
+# Add book to library  {{{
 def add_book_view(request):
     searched = request.POST['addid']
     if request.method == "POST":
@@ -180,37 +205,35 @@ def add_book_view(request):
         new_book.save()
 
         return HttpResponse('Yo')
+# }}}
 
-# Delete a book from the Book database table
-def delete_book_view(request):
-    buttid = request.POST['buttid']
-    if request.method == "POST":
-        Book.objects.filter(googleid=buttid).delete()
-        return HttpResponse('Yo')
 
 ############################
-# Test page view 
-def testpage_view(request):
-        cur_user = request.user
-        library = Book.objects.filter(owner=cur_user)
-        shelves = Shelf.objects.all()
-        return render(request, 'main/testpage.html', {'library': library,
-                                                      'shelves': shelves,
-                                                    })
+# Delete a book from the Book database table{{{
+def delete_book_view(request):
+    cur_user = request.user
+    buttid = request.POST['buttid']
+    if request.method == "POST":
+        Book.objects.filter(owner=cur_user, googleid=buttid).delete()
+        return HttpResponse('Yo')
+# }}}
 
-# Change the shelf for a book
+############################
+# Change the shelf for a book{{{
 def change_shelf(request):
     cur_user = request.user
     shelfn = request.POST['shelfn']
     bookid = request.POST['bookid']
     if request.method == "POST":
-        obj = Book.objects.get(googleid=bookid)
-        shelf = Shelf.objects.get(name=shelfn)
+        obj = Book.objects.get(googleid=bookid, owner=cur_user)
+        shelf = Shelf.objects.get(name=shelfn, owner=cur_user)
         obj.shelf = shelf
         obj.save()
         return HttpResponse('Yo')
+# }}}
 
-#works
+############################
+# Change the shelf that you are viewing in the library{{{
 def get_shelf(request):
     cur_user = request.user
     shelfname = request.POST['shelf']
@@ -220,12 +243,14 @@ def get_shelf(request):
             shelflist = Shelf.objects.filter(owner=cur_user)
             return JsonResponse({'books': list(bookshelf.values()), 'shelves': list(shelflist.values())})
         else:
-            nameshelf = Shelf.objects.get(name=shelfname)
+            nameshelf = Shelf.objects.get(name=shelfname, owner=cur_user)
             bookshelf = Book.objects.filter(owner=cur_user, shelf=nameshelf)
             shelflist = Shelf.objects.filter(owner=cur_user)
             return JsonResponse({'books': list(bookshelf.values()), 'shelves': list(shelflist.values())})
+# }}}
 
-
+############################
+# Get book info from the api for the detail modal{{{
 def get_book_detail(request):
     searched = request.POST['btnid']
     if request.method == "POST":
@@ -289,9 +314,24 @@ def get_book_detail(request):
                 'isbn13': isbn13,
         }
         return JsonResponse(response)
+# }}}
 
-
-
+############################
+# Delete a shelf from users library{{{
+def delete_shelf(request):
+    cur_user = request.user
+    shelfname = request.POST['deletedShelf']
+    shelfid = Shelf.objects.get(owner=cur_user, name=shelfname)
+    defaultshelf = Shelf.objects.get(owner=cur_user, name="Not on Shelf")
+    defaultshelfid = defaultshelf.id
+    if request.method == "POST":
+        booksonshelf = Book.objects.filter(owner=cur_user, shelf=shelfid)
+        for book in booksonshelf:
+            book.shelf = defaultshelf
+            book.save()
+        Shelf.objects.get(owner=cur_user, name=shelfname).delete()
+        return redirect('/library/')
+# }}}
 
 
 

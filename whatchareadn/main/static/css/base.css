@@ -303,6 +303,26 @@ header p {
 
 .del-btn {
 }
+
+#edit-shelf {
+  visibility: hidden;
+}
+
+.edit-shelf-card {
+  z-index: 9999;
+  border-radius: 5px;
+  border: 3px solid black;
+  background: white;
+  margin: 20px auto;
+  width: 90%;
+  height: 700px;
+  min-width: 370px;
+}
+
+#del-shel-btn {
+  display: none;
+}
+
 /*##########################*//*}}}*/
 
 /*##########################*/

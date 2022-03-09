@@ -17,7 +17,7 @@ GoogleBooksAPI Key: AIzaSyArFMXNcONVP1TUkIcZ32GNHbZ8xffQSnY
 
     <form method=POST action="{% url 'main:search' %}">
       {% csrf_token %}
-      <input type="search" placeholder="Search for Books by Title" aria-label="Search" name="titleSearch">
+      <input type="search" autocomplete="off" placeholder="Search for Books by Title" aria-label="Search" name="titleSearch">
       <button type="submit" name="titlebtn">Search</button>
     </form>
   </div>

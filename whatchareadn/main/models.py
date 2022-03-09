@@ -10,6 +10,7 @@ class Shelf(models.Model):
     def __str__(self):
         return self.name
 
+
 class Book(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     selflink = models.URLField(max_length=1000, null=True, blank=True)

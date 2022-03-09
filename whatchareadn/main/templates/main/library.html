@@ -19,6 +19,8 @@
       <option value="{{ shelf }}">{{ shelf }}</option>
       {% endfor%}
     </select>
+
+    <button id="ed-shel-btn" onclick="showEditCard()">Edit Shelves</button>
   </div>
   
   
@@ -66,6 +68,21 @@
       <button class="back-btn">X</button>
     </div>
     <div id="detail-card-description"></div>
+  </div>
+</div>
+
+<div id="edit-shelf" class="modal">
+  <div class="edit-shelf-card">
+    <select id="del-shel-sel" name="del-shel-sel" onchange="showDelete()">
+      <option value="" disabled selected>Choose a shelf to delete</option>
+      {% for shelf in shelves %}
+      {% if shelf.name != "Not on Shelf" %}
+      <option value="{{shelf.name}}">{{shelf.name}}</option>
+      {% endif %}
+      {% endfor %}
+    </select>
+    <button id="del-shel-btn" onclick="deleteShelf()">Delete</button>
+    <button class="close-ed-shel" onclick="hideEditCard()">X</button>
   </div>
 </div>
 

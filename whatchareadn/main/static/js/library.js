@@ -79,8 +79,7 @@ function getShelf() {
           document.getElementById('library-body').innerHTML = temp2;
           //window.location.reload();
       }
-
-    },
+    }
   });
 
 };
@@ -141,3 +140,45 @@ $(document).on('click', '.del-btn', function(e) {
         },
     });
 });
+
+// Show edit card modal
+function showEditCard() {
+  document.getElementsByTagName('BODY')[0].style.overflow = "hidden";
+  document.getElementById('edit-shelf').style.visibility = "visible";
+}
+
+// Hide edit card modal, reset select box, and hide delete button
+function hideEditCard() {
+  selectElement = document.getElementById('del-shel-sel');
+  selectElement.selectedIndex = 0;
+
+  document.getElementById('del-shel-btn').style.display = "none";
+  document.getElementsByTagName('BODY')[0].style.overflow = "auto";
+  document.getElementById('edit-shelf').style.visibility = "hidden";
+
+}
+
+function showDelete() {
+  document.getElementById('del-shel-btn').style.display = "initial";
+
+}
+
+function deleteShelf() {
+  deletedShelf = document.getElementById('del-shel-sel').value;
+  console.log(deletedShelf);
+    $.ajax({
+        type:'POST',
+        url :'/library/delete_shelf/',
+        data:{
+            deletedShelf: deletedShelf,
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function(){
+            selectElement = document.getElementById('del-shel-sel');
+            selectElement.selectedIndex = 0;
+            document.getElementById('del-shel-btn').style.display = "none";
+            window.location.reload();
+
+        },
+    });
+}

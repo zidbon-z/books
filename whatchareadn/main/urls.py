@@ -14,5 +14,6 @@ urlpatterns = [
         path('library/shelf/', views.get_shelf, name='shelf'),
         path('library/change_shelf/', views.change_shelf, name='change-shelf'),
         path('book_detail/', views.get_book_detail, name='bookdetail'),
+        path('library/delete_shelf/', views.delete_shelf, name='delete-shelf'),
 
 ]
