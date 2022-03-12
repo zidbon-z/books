@@ -333,5 +333,23 @@ def delete_shelf(request):
         return redirect('/library/')
 # }}}
 
+############################
+# Create a shelf for a user
+def create_shelf(request):
+    cur_user = request.user
+    shelfname = request.POST['createdShelf']
+    current_shelves = list(Shelf.objects.all().values_list('name', flat=True))
+    if request.method == "POST":
+        if shelfname not in current_shelves:
+            new_shelf = Shelf(
+                             owner=cur_user,
+                             name=shelfname
+                             )
+            new_shelf.save()
+            return redirect('/library/')
+        else:
+            return redirect('/library/')
+
+
 
 

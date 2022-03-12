@@ -466,6 +466,7 @@ header p {
   }
 
   nav a {
+    color: black;
     opacity: 1;
     position: relative;
   }

@@ -25,6 +25,7 @@
   
   
   <div id="library-body">
+    <!--
   {% for book in library %}
   <div class="card" id="book{{ book.googleid }}">
   
@@ -40,7 +41,7 @@
           <label for="book-shelf">Shelf</label>
           {% csrf_token %}
           <select id="book-shelf{{ book.googleid }}" class="book-shelf" googleid="{{ book.googleid }}" name="book-shelf" onchange="getShelf()">
-            <option value="{{book.shelf}}">{{book.shelf}}</option>
+            <option value="{{book.shelf}}" selected>{{book.shelf}}</option>
             {% for shelf in shelves %}
             <option value="{{ shelf }}">{{ shelf }}</option>
             {% endfor%}
@@ -53,6 +54,7 @@
       </div>
   </div>
   {% endfor %}
+    -->
   </div>
 </div>
 
@@ -73,6 +75,8 @@
 
 <div id="edit-shelf" class="modal">
   <div class="edit-shelf-card">
+    <input type="text" id="new-shelf-name" placeholder="Name of new shelf">
+    <button id="add-new-shelf" class="new-shel-btn" onclick="createShelf()">Create Shelf</button>
     <select id="del-shel-sel" name="del-shel-sel" onchange="showDelete()">
       <option value="" disabled selected>Choose a shelf to delete</option>
       {% for shelf in shelves %}
